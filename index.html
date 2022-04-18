@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <?!= include("css")?>
+    <title>Omr Marker </title>
+  </head>
+  <body>
+    <h1> OMR marker </h1>
+    <div class="canvas-container">  
+    <a  id ="downloadOmr" href="#" download="" class="btn btn-primary" role="button">다운로드</a>
+    <table class="table table-hover caption-top table-bordered">
+    <thead class="omr-head">
+      <tr>
+        <th scope="col">선택</th>
+        <th scope="col">제출날짜</th>
+        <th scope="col">사용자 이름</th>
+        <th scope="col">사용자 코드</th>
+        <th scope="col">시험지 번호</th>
+        <th scope="col">1번 </th>
+        <th scope="col">2번 </th>
+        <th scope="col">3번 </th>
+        <th scope="col">4번 </th>
+        <th scope="col">5번 </th>
+        <th scope="col">6번 </th>
+        <th scope="col">7번 </th>
+        <th scope="col">8번 </th>
+        <th scope="col">9번 </th>
+        <th scope="col">10번 </th>
+        <th scope="col">11번 </th>
+        <th scope="col">12번 </th>
+        <th scope="col">13번 </th>
+        <th scope="col">14번 </th>
+        <th scope="col">15번 </th>
+      </tr>
+    </thead>
+    
+    <tbody id="omr-results"></tbody>
+  </table>
+  <div id="loading" class="d-flex justify-content-center align-items-center invisible">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <?!= include("tableManage") ?>
+  <?!= include("omrMarker") ?>
+  <?!= include("download") ?>
+  <?!= include("dataManage") ?>
+  <!-- <div class="canvas" style="display:none"> -->
+  <div class="canvas">
+    <canvas id = "canvas" width="1401px" height="987px"></canvas>
+  </div>
+  </div>
+</body>
+</html>
