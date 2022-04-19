@@ -1,21 +1,26 @@
+// @ts-check
+
 const doGet = () => {
-  return HtmlService.createTemplateFromFile("index.html").evaluate();
-}
+  return HTMLService.createTemplateFromFile("index.html").evaluate();
+};
 
 const include = (filename) => {
   return HtmlService.createHtmlOutputFromFile(filename).getContent();
+};
+
+/**
+ * @type {(...fn: Function[]) => (arg: any) => any}
+ */
+function pipe(...fns) {
+  return (y) => fns.reduce((prevVal, currFn) => currFn(prevVal), y);
 }
 
-const U = (() => {
-  // 함수 연결하기
-  return {
-    pipe(...fns) {
-      return arg => fns.reduce((acc, f) => f(acc), arg);
-    },
-    // 파일이나 탭의 이름을 만드는 함수
-    nameTemplate(sep = "") {
-      return ({ userName = "", userCode = "" } = {}) =>
-        `${userCode}${sep}${userName}`;
-    }
-  }
-})();
+/**
+ * @type {(sep: string) => (userInfo: {userName: string, userCode: string}) => string }
+ */
+function nameTemplate(sep) {
+  return (userInfo) => {
+    const { userCode, userName } = userInfo;
+    return `${userCode}${sep}${userName}`;
+  };
+}
