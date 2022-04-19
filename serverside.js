@@ -1,7 +1,7 @@
 // @ts-check
 
 const doGet = () => {
-  return HTMLService.createTemplateFromFile("index.html").evaluate();
+  return HtmlService.createTemplateFromFile("index.html").evaluate();
 };
 
 const include = (filename) => {
