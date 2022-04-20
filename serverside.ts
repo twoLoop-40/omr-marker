@@ -17,7 +17,7 @@ interface UserInfo {
   userName: string
 }
 
-function nameTemplate(sep) {
+function nameTemplate(sep:string) {
   return (userInfo: UserInfo): string => {
     const { userCode, userName } = userInfo;
     return `${userCode}${sep}${userName}`;

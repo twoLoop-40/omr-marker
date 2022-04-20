@@ -1,21 +1,22 @@
-const fileToData64 = function () {
-  const loadFileFromId = function (fileId) {
+
+function fileToData64 (): (arg: string) => string {
+  const loadFileFromId = (fileId: string) => {
     return DriveApp.getFileById(fileId);
   };
-  const changeFileToBytes = function (file) {
+  const changeFileToBytes = (file: GoogleAppsScript.Drive.File) => {
     return file.getBlob().getBytes();
   };
-  const encode64 = function (bytes) {
+  const encode64 = (bytes: number[]) => {
     return Utilities.base64Encode(bytes);
   };
-  const getMimeType = function (file) {
+  const getMimeType = (file: GoogleAppsScript.Drive.File) => {
     return file.getMimeType();
   };
   const makeSrc = function ({ mimeType, data64 }) {
     return `data:${mimeType};base64,${data64}`;
   };
 
-  return (fileId) => {
+  return (fileId: string): string => {
     const data64 = pipe(loadFileFromId, changeFileToBytes, encode64)(fileId);
     const mimeType = getMimeType(loadFileFromId(fileId));
     console.log(typeof makeSrc({ mimeType, data64 }));
@@ -23,12 +24,12 @@ const fileToData64 = function () {
   };
 };
 
-const fileDataToClient = function (fileId) {
-  const worker = fileToData64();
+function fileDataToClient (fileId: string) {
+  const worker: (arg: string) => string = fileToData64();
   return worker(fileId);
 };
 
-const formatDate = (date) => {
+function formatDate (date: Date) {
   return `${date.getMonth()}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
 };
 
