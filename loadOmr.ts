@@ -28,20 +28,19 @@ function fileDataToClient (fileId: string) {
   return worker(fileId);
 };
 
-type InputData = Date | string | number
-class Student {
-  public studentExamData: InputData[]
-  typeToString (item: InputData) {
-    if (typeof item == 'string') return item 
-    else return item.toString()
+class Student <T> {
+  typeToString (item: T) {
+    return typeof item == 'string' ? item : item.toString() 
   }
   dateToString () {
-    const date: InputData = this.studentExamData[0]
-    if (typeof date == 'string') return date
-    if (typeof date == 'number') return date.toString()
-    else {
-      return `${date.getMonth()}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
-    }  
+    const date: T = this.studentExamData[0]
+    return typeof date == 'string' 
+      ? date
+      : typeof date == 'number'
+      ? date.toString()
+      : date instanceof Date
+      ? `${date.getMonth()}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
+      : null
   }
   getUserCode () {
     return this.typeToString(this.studentExamData[2])
@@ -54,7 +53,7 @@ class Student {
   }
   getAnswers () {
     const examAnswers = this.studentExamData.slice(4, 19)
-    const iter = (exams: InputData | InputData[]) => {
+    const iter = (exams: T | T[]):string[] => {
       if(!Array.isArray(exams)) return [this.typeToString(exams)]
       else { 
         return exams.flatMap(this.getAnswers)
@@ -62,19 +61,42 @@ class Student {
     }
     return iter(examAnswers) 
   }
-  constructor(examData: InputData[]) {
-    this.studentExamData = examData
-  }
+  constructor(
+    public studentExamData: T[]
+   ) {}
 }
-function getWorkingSpreadsheet () {
+function getWorkingSpreadsheet<T> (): (arg: string) => T {
   const spreadsheetIds = {
     kiwi: '1Z_6B89U_pZCX54F0SP2AczCyiNBErl1p7Wx8k_nVXOc'
   }
+  type Iter <T, Q> = {
+    (arg: T | T[]) : Q
+  }
+  const iter: Iter<string, object> = (ssName) => {
+    return typeof ssName == 'string' 
+      ? { [ssName]: SpreadsheetApp.openById(spreadsheetIds[ssName])}
+      : Array.isArray(ssName)
+      ? ssName.reduce((spreadsheets, name) => {
+        return { ...spreadsheets, ...iter(name) }
+      }, {})
+      : new Error('Wrong Input!')
+  }
+  const ssForOut = iter(Object.keys(spreadsheetIds))
+  return (ssName: string): T => {
+    const spreadsheet = ssForOut[ssName]
+    return spreadsheet ? spreadsheet : new Error('No Spreadsheet for ' + `${ssName}`)
+  } 
   
 }
 
-function getStudents (id: string) {
-  
+const spreadsheetsFor = getWorkingSpreadsheet<GoogleAppsScript.Spreadsheet.Spreadsheet>()
+
+function getStudents (ssName: string = 'kiwi') {
+  const ss = spreadsheetsFor(ssName)
+  const sheet = ss.getSheets()[0]
+  type InputForm = string | number | Date
+  const students = sheet.getDataRange().getValues().slice(1).map((data) => new Student<InputForm>(data))
+  students.forEach(student => console.log(student.getUserName()))
 }
 // const getAnswerSheet = () => {
 //   const answerSheetId = "122Efncjwc8BKq9tUKNAdPXVwSxDluEcNxNjCH8GaZGo";

@@ -1,6 +1,6 @@
 { "scriptId":"1IrhXshRI4RFvXKxLmN9lCRb-HBPvUTobeYMVuU4r58eWZXWqPseqFDI_",
 	"filePushOrder": [
 		"serverside.ts",
-		"loadOmr.js"
+		"loadOmr.ts"
 	]
 }

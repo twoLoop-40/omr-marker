@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["esnext"],
+    "lib": ["ES2020", "ESNext"],
     "experimentalDecorators": true
   }
 }
