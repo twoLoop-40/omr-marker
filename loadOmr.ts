@@ -32,14 +32,14 @@ class Student <T> {
   typeToString (item: T) {
     return typeof item == 'string' ? item : item.toString() 
   }
-  dateToString () {
+  dateToString (time?: number): string {
     const date: T = this.studentExamData[0]
     return typeof date == 'string' 
       ? date
       : typeof date == 'number'
       ? date.toString()
       : date instanceof Date
-      ? `${date.getMonth()}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
+      ? this.dateToString(date.getTime())
       : null
   }
   getUserCode () {
@@ -50,6 +50,9 @@ class Student <T> {
   }
   getExamCode () {
     return this.typeToString(this.studentExamData[3])
+  }
+  getSubmitTime () {
+    return this.dateToString()
   }
   getAnswers () {
     const examAnswers = this.studentExamData.slice(4, 19)
@@ -69,10 +72,15 @@ function getWorkingSpreadsheet<T> (): (arg: string) => T {
   const spreadsheetIds = {
     kiwi: '1Z_6B89U_pZCX54F0SP2AczCyiNBErl1p7Wx8k_nVXOc'
   }
+  type spreadsheetMap = {
+    [key: string]: GoogleAppsScript.Spreadsheet.Spreadsheet
+  }
   type Iter <T, Q> = {
     (arg: T | T[]) : Q
   }
-  const iter: Iter<string, object> = (ssName) => {
+  
+  
+  const iter: Iter<string, spreadsheetMap | Error> = (ssName) => {
     return typeof ssName == 'string' 
       ? { [ssName]: SpreadsheetApp.openById(spreadsheetIds[ssName])}
       : Array.isArray(ssName)
