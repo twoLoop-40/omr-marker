@@ -1,4 +1,7 @@
-function fileToData64 (): (arg: string) => string {
+type NormalFunction <T> = {
+  (arg: T): T
+}
+function fileToData64 (): NormalFunction<string> {
   const loadFileFromId = (fileId: string) => {
     return DriveApp.getFileById(fileId);
   };
@@ -11,8 +14,13 @@ function fileToData64 (): (arg: string) => string {
   const getMimeType = (file: GoogleAppsScript.Drive.File) => {
     return file.getMimeType();
   };
-  const makeSrc = function ({ mimeType, data64 }) {
-    return `data:${mimeType};base64,${data64}`;
+  type Source = {
+    mimeType: string
+    data64: number
+  }
+  const makeSrc = function (source: Source) {
+    const { mimeType, data64 } = source
+    return `${mimeType};base64,${data64}`
   };
 
   return (fileId: string): string => {
@@ -30,9 +38,9 @@ function fileDataToClient (fileId: string) {
 
 class Student <T> {
   typeToString (item: T) {
-    return typeof item == 'string' ? item : item.toString() 
+    return typeof item == 'string' ? item : String(item) 
   }
-  dateToString (time?: number): string {
+  dateToString (time?: number): string | Error {
     const date: T = this.studentExamData[0]
     return typeof date == 'string' 
       ? date
@@ -40,7 +48,7 @@ class Student <T> {
       ? date.toString()
       : date instanceof Date
       ? this.dateToString(date.getTime())
-      : null
+      : new Error('Wrong Type')
   }
   getUserCode () {
     return this.typeToString(this.studentExamData[2])
@@ -68,19 +76,21 @@ class Student <T> {
     public studentExamData: T[]
    ) {}
 }
-function getWorkingSpreadsheet<T> (): (arg: string) => T {
-  const spreadsheetIds = {
+function getWorkingSpreadsheet () {
+  type NameAndId = {
+    [key: string]: string
+  }
+  const spreadsheetIds: NameAndId = {
     kiwi: '1Z_6B89U_pZCX54F0SP2AczCyiNBErl1p7Wx8k_nVXOc'
   }
-  type spreadsheetMap = {
+  interface spreadsheetMap {
     [key: string]: GoogleAppsScript.Spreadsheet.Spreadsheet
   }
   type Iter <T, Q> = {
     (arg: T | T[]) : Q
   }
   
-  
-  const iter: Iter<string, spreadsheetMap | Error> = (ssName) => {
+  const iter: Iter<string, spreadsheetMap> = (ssName) => {
     return typeof ssName == 'string' 
       ? { [ssName]: SpreadsheetApp.openById(spreadsheetIds[ssName])}
       : Array.isArray(ssName)
@@ -90,14 +100,12 @@ function getWorkingSpreadsheet<T> (): (arg: string) => T {
       : new Error('Wrong Input!')
   }
   const ssForOut = iter(Object.keys(spreadsheetIds))
-  return (ssName: string): T => {
-    const spreadsheet = ssForOut[ssName]
-    return spreadsheet ? spreadsheet : new Error('No Spreadsheet for ' + `${ssName}`)
-  } 
-  
+  return (ssName: string) => {
+    return ssForOut[ssName]
+  }   
 }
 
-const spreadsheetsFor = getWorkingSpreadsheet<GoogleAppsScript.Spreadsheet.Spreadsheet>()
+const spreadsheetsFor = getWorkingSpreadsheet()
 
 function getStudents (ssName: string = 'kiwi') {
   const ss = spreadsheetsFor(ssName)
