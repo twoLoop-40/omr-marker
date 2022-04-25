@@ -42,10 +42,10 @@ function makeHtmlFile (jsSource: Promise<string>, fileName: string) {
 		.then((source: string) => sendSource(source, './front'))
 }
 
-function test () {
+function makeHtml () {
 	const jsSrc = makeJsFileSrc()	
 	makeHtmlFile(jsSrc, fileName)
 }
-test()
+makeHtml()
 
 	

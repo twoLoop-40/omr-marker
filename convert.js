@@ -29,8 +29,8 @@ function makeHtmlFile(jsSource, fileName) {
     jsSource.then(function (source) { return attatchWords(source, ['<script>', '</script>']); })
         .then(function (source) { return sendSource(source, './front'); });
 }
-function test() {
+function makeHtml() {
     var jsSrc = makeJsFileSrc();
     makeHtmlFile(jsSrc, fileName);
 }
-test();
+makeHtml();
