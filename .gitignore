@@ -1,2 +1,4 @@
 # npm이 설치하는 파일을 무시합니다.
 node_modules
+tsconfig
+.gitignore
