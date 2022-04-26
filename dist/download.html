@@ -1,0 +1,19 @@
+<script>
+function downLoad(urlArray) {
+    var downloadOmrEl = document.querySelector("#downloadOmr");
+    !downloadOmrEl
+        ? downloadOmrEl
+        : downloadOmrEl.addEventListener("click", function (event) {
+            //사진으로 저장하는 부분
+            for (var _i = 0, urlArray_1 = urlArray; _i < urlArray_1.length; _i++) {
+                var urls = urlArray_1[_i];
+                var link = document.createElement("a");
+                link.download = "".concat(urls.name);
+                link.href = "".concat(urls.url);
+                link.click();
+                URL.revokeObjectURL(link.href);
+            }
+        });
+}
+
+</script>

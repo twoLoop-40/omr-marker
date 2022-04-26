@@ -1,5 +1,5 @@
 { "scriptId":"1IrhXshRI4RFvXKxLmN9lCRb-HBPvUTobeYMVuU4r58eWZXWqPseqFDI_",
-	"rootDir": "src/",
+	"rootDir": "dist/",
 	"filePushOrder": [
 		"src/serverside.ts",
 		"src/loadOmr.ts"

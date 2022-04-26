@@ -51,7 +51,7 @@ function createNode (nodeSource: NodeSrc)  {
 	return element;
 };
 	
-const createRows = (obj, count) => {
+function createRows (obj, count) {
 	const tr = createNode({ nodeName: "tr", className: "studentOmr" })
 	/**checkBox 만들기 **/
 	const checkBox = createNode({nodeName: "input", className:"form-check-input", id:"flexCheckDefault" });

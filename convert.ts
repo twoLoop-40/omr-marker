@@ -39,7 +39,7 @@ function makeHtmlFile (jsSource: Promise<string>, fileName: string) {
 	}
 
 	jsSource.then((source: string) => attatchWords(source, ['<script>', '</script>']))
-		.then((source: string) => sendSource(source, './src'))
+		.then((source: string) => sendSource(source, './dist'))
 }
 
 function makeHtml () {
