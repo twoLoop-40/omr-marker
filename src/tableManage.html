@@ -1,0 +1,114 @@
+<script>
+function showLoadingScreen() {
+    var loadingEl = document.querySelector('#loading');
+    return function () {
+        var classes = loadingEl ? loadingEl.classList : null;
+        if (!classes)
+            return;
+        else {
+            classes.contains('invisible')
+                ? classes.remove('invisible')
+                : classes.add('invisible');
+        }
+    };
+}
+function asyncRun(serverWork) {
+    var serverFunction = serverWork.serverFunction, args = serverWork.args;
+    var changeLoadingView = showLoadingScreen();
+    changeLoadingView();
+    return new Promise(function (resolve, reject) {
+        var _a;
+        (_a = google.script.run
+            .withSuccessHandler(function (result) {
+            changeLoadingView();
+            resolve(result);
+        })
+            .withFailureHandler(function (err) { return reject(err); }))[serverFunction].apply(_a, args);
+    });
+}
+/** table 생성 관련 **/
+var createNode = function (_a) {
+    var _b = _a.nodeName, nodeName = _b === void 0 ? "" : _b, _c = _a.className, className = _c === void 0 ? "" : _c, _d = _a.id, id = _d === void 0 ? "" : _d, _e = _a.data, data = _e === void 0 ? "" : _e;
+    var element = document.createElement(nodeName);
+    if (className) {
+        className.split(" ").forEach(function (name) { return element.classList.add(name); });
+    }
+    element.setAttribute("id", id);
+    element.innerHTML = data;
+    return element;
+};
+var createRows = function (obj, count) {
+    var tr = createNode({ nodeName: "tr", className: "studentOmr" });
+    /**checkBox 만들기 **/
+    var checkBox = createNode({ nodeName: "input", className: "form-check-input", id: "flexCheckDefault" });
+    checkBox.setAttribute("type", "checkbox");
+    checkBox.setAttribute("value", count);
+    /**checked 관련**/
+    checkBox.addEventListener("click", function (event) {
+        console.log(event.target);
+    });
+    tr.appendChild(checkBox);
+    var run = function (name, value) {
+        if (typeof (value) == "string") {
+            var td = createNode({ nodeName: "td", className: name, data: value });
+            tr.appendChild(td);
+            return;
+        }
+        if (typeof (value) == "object") {
+            for (var _i = 0, value_1 = value; _i < value_1.length; _i++) {
+                var num = value_1[_i];
+                run(name, num);
+            }
+        }
+    };
+    for (var data in obj) {
+        run(data, obj[data]);
+    }
+    // /**
+    //  * answers 일때 구분 필요
+    //  * @type {(names: string[]) => HTMLElement[]}
+    //  */
+    // const makeTds = (names = Object.keys(obj)) => {
+    //   if (typeof names == 'string') {
+    //     // if (typeof obj[names] == 'object'){
+    //     //   return obj[names].forEach(value => makeTds(names, value))
+    //     // }
+    //     //names ex)sumbitDate
+    //     return [
+    //       createNode({nodeName: 'td', className: names, data: obj[names]})
+    //     ]
+    //   } else {  
+    //     // console.log(names)
+    //     return names.flatMap(name => makeTds(name))
+    //   }
+    // }
+    // /**
+    //  * else문에서 각 node들을 재귀함수로 돌려서
+    //  * tr에 append함
+    //  * @type {(elems: HTMLElemet[]) => HTMLElement}
+    //  */
+    // const iter = (tr, elems) => {
+    //   if (elems.type && elems.type == 'checkbox') {
+    //     checkBox.addEventListener("click", event => {
+    //       // checkChecked(event.target)
+    //     })
+    //     tr.appendChild(checkBox)
+    //     return tr
+    //   } else if (elems.nodeName == 'TD') {
+    //     tr.appendChild(elems)
+    //     return tr
+    //   } 
+    //   else return elems.reduce((prevTr, elem) => iter(prevTr, elem), tr)
+    // }
+    // return iter(
+    //   createNode({ nodeName: "tr", className: "studentOmr" }),
+    //   [checkBox, ...makeTds()]  
+    // )
+    return tr;
+};
+var makeTableRow = function (obj, count) {
+    var tbody = document.querySelector("#omr-results");
+    var nodes = createRows(obj, count);
+    tbody.appendChild(nodes);
+};
+</script>

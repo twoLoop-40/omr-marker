@@ -12,7 +12,7 @@
     "@types/node": "^17.0.26"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "html": "node convert.js"
   },
   "repository": {
     "type": "git",

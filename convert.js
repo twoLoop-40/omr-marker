@@ -27,7 +27,7 @@ function makeHtmlFile(jsSource, fileName) {
             .then(function () { return console.log('js file deleted'); })["catch"](function (err) { return console.error(err); });
     };
     jsSource.then(function (source) { return attatchWords(source, ['<script>', '</script>']); })
-        .then(function (source) { return sendSource(source, './front'); });
+        .then(function (source) { return sendSource(source, './src'); });
 }
 function makeHtml() {
     var jsSrc = makeJsFileSrc();
