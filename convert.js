@@ -4,7 +4,7 @@ var shell = require('shelljs');
 var fileName = process.argv[2];
 function makeJsFileSrc() {
     var getPath = function (fileName) {
-        return path.join('.', fileName);
+        return path.join('./src', fileName);
     };
     var tsName = getPath(fileName);
     shell.exec("tsc ".concat(tsName));
@@ -23,7 +23,7 @@ function makeHtmlFile(jsSource, fileName) {
         var longName = extChange(path.join(destination, fileName), 'html');
         fs.writeFile(longName, src)
             .then(function () { return console.log('HTML made!'); })
-            .then(function () { return fs.unlink(extChange(path.join('.', fileName), 'js')); })
+            .then(function () { return fs.unlink(extChange(path.join('./src', fileName), 'js')); })
             .then(function () { return console.log('js file deleted'); })["catch"](function (err) { return console.error(err); });
     };
     jsSource.then(function (source) { return attatchWords(source, ['<script>', '</script>']); })

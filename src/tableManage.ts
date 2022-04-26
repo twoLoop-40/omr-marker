@@ -35,7 +35,7 @@ function asyncRun (serverWork: WorkQue<any>) {
 /** table 생성 관련 **/
 interface NodeSrc {
 	nodeName: string
-	className?: string
+	className: string
 	id?: string
 	data?: string
 }
@@ -126,8 +126,8 @@ function createRows (obj, count) {
 	return tr;
 };
 
-const makeTableRow = (obj, count) => {
+function makeTableRow (obj, count) {
 	const tbody = document.querySelector("#omr-results");
 	const nodes = createRows(obj, count);
-	tbody.appendChild(nodes);
+	tbody ? tbody.appendChild(nodes) : tbody
 };

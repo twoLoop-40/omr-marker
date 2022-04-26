@@ -9,7 +9,7 @@ function makeJsFileSrc (): Promise<string> {
 		(arg: T): T
 	}	
 	const getPath: OneArg<string> = (fileName) => {
-		return path.join('.', fileName)
+		return path.join('./src', fileName)
 	}
 	const tsName = getPath(fileName)
 	shell.exec(`tsc ${tsName}`)
@@ -33,7 +33,7 @@ function makeHtmlFile (jsSource: Promise<string>, fileName: string) {
 			'html')
 		fs.writeFile(longName, src)
 			.then(() => console.log('HTML made!'))
-			.then(() => fs.unlink(extChange(path.join('.', fileName), 'js')))
+			.then(() => fs.unlink(extChange(path.join('./src', fileName), 'js')))
 			.then(() => console.log('js file deleted'))
 			.catch((err: Error) => console.error(err))
 	}

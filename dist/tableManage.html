@@ -39,7 +39,7 @@ function createNode(nodeSource) {
     return element;
 }
 ;
-var createRows = function (obj, count) {
+function createRows(obj, count) {
     var tr = createNode({ nodeName: "tr", className: "studentOmr" });
     /**checkBox 만들기 **/
     var checkBox = createNode({ nodeName: "input", className: "form-check-input", id: "flexCheckDefault" });
@@ -107,11 +107,13 @@ var createRows = function (obj, count) {
     //   [checkBox, ...makeTds()]  
     // )
     return tr;
-};
-var makeTableRow = function (obj, count) {
+}
+;
+function makeTableRow(obj, count) {
     var tbody = document.querySelector("#omr-results");
     var nodes = createRows(obj, count);
-    tbody.appendChild(nodes);
-};
+    tbody ? tbody.appendChild(nodes) : tbody;
+}
+;
 
 </script>
