@@ -1,15 +1,18 @@
 function showLoadingScreen () {
+	const toggleProp = (list: DOMTokenList, prop: string) => {
+		list.contains(prop)
+			? list.remove(prop)
+			: list.add(prop)
+	}
 	const loadingEl = document.querySelector('#loading')
 	return () => {
 		const classes = loadingEl ? loadingEl.classList : null
-		if(!classes) return 
-		else {
-			classes.contains('invisible') 
-			? classes.remove('invisible') 
-			: classes.add('invisible')
-		}
+		classes 
+			? toggleProp(classes, 'invisible')
+			: classes
 	}
 }
+
 // google.script.run promisify
 interface WorkQue <T> {
 	serverFunction: string
@@ -30,13 +33,21 @@ function asyncRun (serverWork: WorkQue<any>) {
 	})
 }
 /** table 생성 관련 **/
-const createNode = ({nodeName = "", className = "", id = "", data = "",}) => {
+interface NodeSrc {
+	nodeName: string
+	className?: string
+	id?: string
+	data?: string
+}
+function createNode (nodeSource: NodeSrc)  {
+	const { nodeName, className, id, data } = nodeSource
 	const element = document.createElement(nodeName);
-	if (className) {
-		className.split(" ").forEach(name => element.classList.add(name));
-	}
-	element.setAttribute("id", id);
-	element.innerHTML = data;
+	className
+		? className.split(" ").forEach((name: string) => element.classList.add(name))
+		: className
+	element && id && data 
+		? (element.setAttribute("id", id), element.innerHTML = data)
+		: element 
 	return element;
 };
 	

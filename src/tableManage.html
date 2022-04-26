@@ -1,15 +1,16 @@
 <script>
 function showLoadingScreen() {
+    var toggleProp = function (list, prop) {
+        list.contains(prop)
+            ? list.remove(prop)
+            : list.add(prop);
+    };
     var loadingEl = document.querySelector('#loading');
     return function () {
         var classes = loadingEl ? loadingEl.classList : null;
-        if (!classes)
-            return;
-        else {
-            classes.contains('invisible')
-                ? classes.remove('invisible')
-                : classes.add('invisible');
-        }
+        classes
+            ? toggleProp(classes, 'invisible')
+            : classes;
     };
 }
 function asyncRun(serverWork) {
@@ -26,17 +27,18 @@ function asyncRun(serverWork) {
             .withFailureHandler(function (err) { return reject(err); }))[serverFunction].apply(_a, args);
     });
 }
-/** table 생성 관련 **/
-var createNode = function (_a) {
-    var _b = _a.nodeName, nodeName = _b === void 0 ? "" : _b, _c = _a.className, className = _c === void 0 ? "" : _c, _d = _a.id, id = _d === void 0 ? "" : _d, _e = _a.data, data = _e === void 0 ? "" : _e;
+function createNode(nodeSource) {
+    var nodeName = nodeSource.nodeName, className = nodeSource.className, id = nodeSource.id, data = nodeSource.data;
     var element = document.createElement(nodeName);
-    if (className) {
-        className.split(" ").forEach(function (name) { return element.classList.add(name); });
-    }
-    element.setAttribute("id", id);
-    element.innerHTML = data;
+    className
+        ? className.split(" ").forEach(function (name) { return element.classList.add(name); })
+        : className;
+    element && id && data
+        ? (element.setAttribute("id", id), element.innerHTML = data)
+        : element;
     return element;
-};
+}
+;
 var createRows = function (obj, count) {
     var tr = createNode({ nodeName: "tr", className: "studentOmr" });
     /**checkBox 만들기 **/
@@ -111,4 +113,5 @@ var makeTableRow = function (obj, count) {
     var nodes = createRows(obj, count);
     tbody.appendChild(nodes);
 };
+
 </script>
