@@ -36,46 +36,7 @@ function fileDataToClient (fileId: string) {
   return worker(fileId);
 };
 
-class Student <T> {
-  typeToString (item: T) {
-    return typeof item == 'string' ? item : String(item) 
-  }
-  dateToString (time?: number): string | Error {
-    const date: T = this.studentExamData[0]
-    return typeof date == 'string' 
-      ? date
-      : typeof date == 'number'
-      ? date.toString()
-      : date instanceof Date
-      ? this.dateToString(date.getTime())
-      : new Error('Wrong Type')
-  }
-  getUserCode () {
-    return this.typeToString(this.studentExamData[2])
-  }
-  getUserName () {
-    return this.typeToString(this.studentExamData[1])
-  }
-  getExamCode () {
-    return this.typeToString(this.studentExamData[3])
-  }
-  getSubmitTime () {
-    return this.dateToString()
-  }
-  getAnswers () {
-    const examAnswers = this.studentExamData.slice(4, 19)
-    const iter = (exams: T | T[]):string[] => {
-      if(!Array.isArray(exams)) return [this.typeToString(exams)]
-      else { 
-        return exams.flatMap(this.getAnswers)
-      }
-    }
-    return iter(examAnswers) 
-  }
-  constructor(
-    public studentExamData: T[]
-   ) {}
-}
+
 function getWorkingSpreadsheet () {
   type NameAndId = {
     [key: string]: string
@@ -106,27 +67,9 @@ function getWorkingSpreadsheet () {
 }
 
 const spreadsheetsFor = getWorkingSpreadsheet()
-
-function getStudents (ssName: string = 'kiwi') {
+type AnswerSheetData = string | number | Date
+function getAnswerSheetData (ssName: string = 'kiwi'): AnswerSheetData[][] {
   const ss = spreadsheetsFor(ssName)
   const sheet = ss.getSheets()[0]
-  type InputForm = string | number | Date
-  const students = sheet.getDataRange().getValues().slice(1).map((data) => new Student<InputForm>(data))
-  students.forEach(student => console.log(student.getUserName()))
+  return sheet.getDataRange().getValues().slice(1)
 }
-// const getAnswerSheet = () => {
-//   const answerSheetId = "122Efncjwc8BKq9tUKNAdPXVwSxDluEcNxNjCH8GaZGo";
-//   const ss = SpreadsheetApp.openById(answerSheetId);
-//   const sheetData = ss.getRange("A2:S50").getValues();
-//   let toStingData = [];
-//   sheetData
-//     .filter((line) => !line.slice(2, 4).includes(""))
-//     .forEach((data) => {
-//       toStingData.push([
-//         formatDate(data[0]),
-//         ...data.splice(1).map((value) => String(value)),
-//       ]);
-//     });
-//   // console.log(reframedData);
-//   return toStingData;
-// };

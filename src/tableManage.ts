@@ -18,18 +18,19 @@ interface WorkQue <T> {
 	serverFunction: string
 	args?: T[]
 } 
-function asyncRun<T, U> (serverWork: WorkQue<T>) {
+function asyncRun<T, U> (serverWork: WorkQue<T>): Promise<U> {
 	const { serverFunction, args } = serverWork
 	const changeLoadingView = showLoadingScreen()
 	changeLoadingView()
 	return new Promise((resolve, reject) => {
-		google.script.run
+		args 
+			? google.script.run
 			.withSuccessHandler((result: U) => {
 				changeLoadingView()
 				resolve(result)
 			})
 			.withFailureHandler((err: Error) => reject(err))
-			[serverFunction](...args)
+			[serverFunction](...args!)
 	})
 }
 /** table 생성 관련 **/
