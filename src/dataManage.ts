@@ -46,13 +46,13 @@ const getAnswerData = async() => {
 	const students = answerData.map((studentData: AnswerSheetData[]) => new Student<AnswerSheetData>(studentData))
 	const answerObject = []
 	//시트 정보를 잘라주는 역할을 하는 함수
-	const formatData = data => {
+	const formatData = (student: Student<AnswerSheetData>) => {
 		return {
-			sumbitDate: data[0],
-			userName: data[1],
-			userCode: data[2],
-			examCode: data[3],
-			answers: data.slice(4),
+			sumbitDate: student.getSubmitTime(),
+			userName: student.getUserName(),
+			userCode: student.getUserCode(),
+			examCode: student.getExamCode(),
+			answers: student.getAnswers(),
 		};
 	};
 	let count = 0
