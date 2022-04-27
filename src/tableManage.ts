@@ -16,15 +16,15 @@ function showLoadingScreen () {
 // google.script.run promisify
 interface WorkQue <T> {
 	serverFunction: string
-	args: T[]
+	args?: T[]
 } 
-function asyncRun (serverWork: WorkQue<any>) {
+function asyncRun<T, U> (serverWork: WorkQue<T>) {
 	const { serverFunction, args } = serverWork
 	const changeLoadingView = showLoadingScreen()
 	changeLoadingView()
 	return new Promise((resolve, reject) => {
 		google.script.run
-			.withSuccessHandler((result: any) => {
+			.withSuccessHandler((result: U) => {
 				changeLoadingView()
 				resolve(result)
 			})

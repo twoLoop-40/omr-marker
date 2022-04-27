@@ -1,6 +1,8 @@
-var fs = require('fs').promises;
-var path = require('path');
-var shell = require('shelljs');
+"use strict";
+exports.__esModule = true;
+var fs = require("fs/promises");
+var path = require("path");
+var shell = require("shelljs");
 var fileName = process.argv[2];
 function makeJsFileSrc() {
     var getPath = function (fileName) {

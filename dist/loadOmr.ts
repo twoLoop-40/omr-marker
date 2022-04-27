@@ -14,7 +14,7 @@ function fileToData64 (): NormalFunction<string> {
   const getMimeType = (file: GoogleAppsScript.Drive.File) => {
     return file.getMimeType();
   };
-  type Source = {
+  interface Source {
     mimeType: string
     data64: number
   }

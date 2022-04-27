@@ -1,6 +1,6 @@
-const fs = require('fs').promises
-const path = require('path')
-const shell = require('shelljs')
+import * as fs from "fs/promises"
+import * as path from 'path'
+import * as shell from 'shelljs'
 
 const fileName: string = process.argv[2]
 
@@ -47,5 +47,3 @@ function makeHtml () {
 	makeHtmlFile(jsSrc, fileName)
 }
 makeHtml()
-
-	
